@@ -1,28 +1,27 @@
 import React from "react";
 
-function Login() {
+function Login({ setCurrentPage }) {
+
+  const handleLogin = () => {
+    setCurrentPage("Dashboard");   // masuk ke home
+  };
+
+  const handleSignup = () => {
+    setCurrentPage("Register");    // pergi ke halaman register
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-purple-100 p-4">
       <div className="flex flex-col md:flex-row bg-white rounded-2xl shadow-xl overflow-hidden max-w-4xl w-full">
 
         {/* Bagian Kiri: Ilustrasi */}
         <div className="md:w-1/2 w-full p-8 bg-purple-50 flex items-center justify-center">
-          {/* Jika ingin pakai gambar asli, aktifkan ini:
-          <img 
-            src="/images/brain_illustration.png" 
-            alt="Brain Illustration" 
-            className="max-w-full h-auto"
-          /> 
-          */}
-
-          {/* Ikon placeholder */}
           <div className="flex flex-col items-center">
             <svg
               className="w-40 h-40 md:w-48 md:h-48 text-purple-600"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
             >
               <path
                 strokeLinecap="round"
@@ -39,7 +38,7 @@ function Login() {
             </svg>
 
             <span className="text-gray-700 text-lg mt-4">
-              Pelajaran Lebih Mudah
+              SCELE NEXT GENERATION
             </span>
           </div>
         </div>
@@ -68,14 +67,14 @@ function Login() {
           </div>
 
           <div className="text-right mb-6">
-            <button
-              className="text-purple-600 hover:underline text-sm font-medium transition duration-200"
-            >
+            <button className="text-purple-600 hover:underline text-sm font-medium transition duration-200">
               Forgot Password?
             </button>
           </div>
 
+          {/* LOGIN BUTTON */}
           <button
+            onClick={handleLogin}
             className="w-full bg-purple-600 text-white p-3 rounded-lg font-semibold 
             hover:bg-purple-700 transition duration-200 mb-4 shadow-md"
           >
@@ -86,7 +85,9 @@ function Login() {
             Don't have an account?
           </div>
 
+          {/* SIGN UP BUTTON */}
           <button
+            onClick={handleSignup}
             className="w-full bg-purple-500 text-white p-3 rounded-lg font-semibold 
             hover:bg-purple-600 transition duration-200 shadow-md"
           >
