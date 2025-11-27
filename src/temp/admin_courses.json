@@ -1,0 +1,33 @@
+[
+    {
+        "id": 1,
+        "title": "Tailwind CSS for Modern Web",
+        "subtitle": "Dasar-dasar Tailwind CSS & Utility-First Workflow",
+        "subject": "Web Development",
+        "semester": "Genap 2024",
+        "author": "Adrian Dev",
+        "rating": 4.8,
+        "students": 1500,
+        "thumbnail": "https://placehold.co/400x220/334155/ffffff?text=Tailwind+CSS",
+        "isPopular": true,
+        "content": "Selamat datang ke kursus Tailwind CSS! Di sini, anda akan belajar bagaimana untuk membina antaramuka pengguna yang cantik dan responsif dengan pantas tanpa perlu menulis sebarang CSS tersuai. \n\nModul termasuk: Utility-First Fundamentals, Responsive Design, State Variants (Hover, Focus), dan Customizing Configuration. Sesi latihan praktikal akan berfokus pada pembinaan kad, navigasi, dan borang.",
+        "enrollmentCount": 1500,
+        "materials": [
+            {
+                "name": "Pengantar Tailwind.pdf",
+                "size": "1.5 MB",
+                "type": "pdf"
+            },
+            {
+                "name": "Utility-First Cheat Sheet.docx",
+                "size": "300 KB",
+                "type": "doc"
+            },
+            {
+                "name": "Studi Kasus Responsif.txt",
+                "size": "10 KB",
+                "type": "txt"
+            }
+        ]
+    }
+]

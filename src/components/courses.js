@@ -1,136 +1,55 @@
-import React, { useState, useMemo } from 'react';
-// useNavigate is removed as it was not used in the previous code
+import React, { useState, useMemo, useCallback } from 'react';
+import coursesData from '../temp/courses.json';
+import { SmallCourseCard } from './subcomponents/interface-course';
+import CourseDetailView from './subcomponents/course-detail';
 
-// --- MOCK DATA ---
-const MOCK_COURSES = [
-  { 
-    id: 1, 
-    title: 'Dasar-dasar Pemrograman Python', 
-    author: 'Adi Nugroho', 
-    subject: 'Programming', 
-    status: 'active', 
-    chapters: 8,
-    thumbnail: 'https://placehold.co/400x220/334155/ffffff?text=Python'
-  },
-  { 
-    id: 2, 
-    title: 'Pengenalan Statistika Data', 
-    author: 'Bima Sakti', 
-    subject: 'Data Science', 
-    status: 'completed', 
-    chapters: 10,
-    thumbnail: 'https://placehold.co/400x220/0f766e/ffffff?text=Statistik'
-  },
-  { 
-    id: 3, 
-    title: 'Desain UX untuk Pemula', 
-    author: 'Citra Dewi', 
-    subject: 'Design', 
-    status: 'catalog', // Will be ignored in this view
-    chapters: 5,
-    thumbnail: 'https://placehold.co/400x220/4f46e5/ffffff?text=UX/UI'
-  },
-  { 
-    id: 4, 
-    title: 'Jaringan Komputer Dasar', 
-    author: 'Dedy Corbuzier', 
-    subject: 'Networking', 
-    status: 'active', 
-    chapters: 6,
-    thumbnail: 'https://placehold.co/400x220/be123c/ffffff?text=Networking'
-  },
-  { 
-    id: 5, 
-    title: 'Advanced JavaScript Concepts', 
-    author: 'Ella Fitri', 
-    subject: 'Programming', 
-    status: 'completed', 
-    chapters: 12,
-    thumbnail: 'https://placehold.co/400x220/ca8a04/ffffff?text=JS'
-  },
-];
 
+const ALL_COURSES = Array.isArray(coursesData) ? coursesData : [];
 
 // =========================
 //     MAIN COMPONENT
 // =========================
 
 function Courses() {
-  // Only need state for search term now
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCourse, setSelectedCourse] = useState(null);
 
-  // 1. Filter MOCK_COURSES to only include ENROLLED courses (active or completed)
-  const ENROLLED_COURSES = useMemo(() => 
-    MOCK_COURSES.filter(
-      (c) => c.status === 'active' || c.status === 'completed'
-    ), []);
-
-  // Filtered courses based on search term only
   const filteredCourses = useMemo(() => {
-    let courses = ENROLLED_COURSES.filter(course => {
-      // Search filter logic: checks title, author, and subject
-      const lower = searchTerm.toLowerCase();
-      if (searchTerm && !(
-        course.title.toLowerCase().includes(lower) ||
-        course.author.toLowerCase().includes(lower) ||
-        course.subject.toLowerCase().includes(lower)
-      )) return false;
-      
-      return true;
+    const lower = searchTerm.trim().toLowerCase();
+    const nextCourses = [...ALL_COURSES];
+
+    const filtered = nextCourses.filter(course => {
+      if (!lower) return true;
+      return (
+        course.title?.toLowerCase().includes(lower) ||
+        course.author?.toLowerCase().includes(lower) ||
+        course.subject?.toLowerCase().includes(lower) ||
+        course.subtitle?.toLowerCase().includes(lower)
+      );
     });
 
-    // Sorting the list alphabetically by title
-    courses.sort((a, b) => a.title.localeCompare(b.title));
+    filtered.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+    return filtered;
+  }, [searchTerm]);
 
-    return courses;
-  }, [searchTerm, ENROLLED_COURSES]);
+  const handleCourseClick = useCallback((course) => {
+    setSelectedCourse(course);
+  }, []);
 
+  const handleBackToList = useCallback(() => {
+    setSelectedCourse(null);
+  }, []);
 
-  const CourseCard = ({ course }) => {
-    // Determine the button text based on status
-    const buttonText = course.status === 'completed' ? 'Lihat Detail' : 'Lanjutkan Belajar';
-
-    return (
-      <div 
-        className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl hover:scale-[1.02] transition duration-300 cursor-pointer flex flex-col"
-        onClick={() => console.log(`Navigating to course: ${course.title}`)} // Simulate navigation
-      >
-        <div className="relative h-40">
-          <img 
-            src={course.thumbnail}
-            alt={course.title}
-            className="w-full h-full object-cover"
-            onError={(e) => { e.target.onerror = null; e.target.src="https://placehold.co/400x220/f1f5f9/94a3b8?text=Course+Image"; }}
-          />
-        </div>
-
-        <div className="p-4 flex flex-col flex-grow">
-          <p className="text-sm font-semibold text-gray-500 mb-1">{course.subject}</p>
-          <h3 className="text-lg font-bold text-gray-800 line-clamp-2 min-h-[56px]">
-            {course.title}
-          </h3>
-
-          <p className="text-xs text-gray-500 mt-2 flex-grow">
-            Oleh: <span className="font-medium text-gray-600">{course.author}</span>
-          </p>
-
-          <div className="mt-4 pt-4 border-t border-gray-100 flex justify-between items-center">
-            <p className="text-sm text-gray-600">
-                <span className="font-semibold">{course.chapters}</span> Bab
-            </p>
-            <button className="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition shadow-md hover:shadow-lg active:scale-[0.98]">
-              {buttonText}
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-
-  // Check if there are no results
   const noResults = filteredCourses.length === 0;
 
+
+  if (selectedCourse) {
+    return (
+      <div className="p-4 sm:p-8 max-w-5xl mx-auto font-sans">
+        <CourseDetailView course={selectedCourse} onBack={handleBackToList} />
+      </div>
+    );
+  }
 
   return (
     <div className="p-4 sm:p-8 max-w-7xl mx-auto font-sans">
@@ -164,7 +83,7 @@ function Courses() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredCourses.map((course) => (
-            <CourseCard key={course.id} course={course} />
+            <SmallCourseCard key={course.id} course={course} onCourseClick={handleCourseClick} />
           ))}
         </div>
       )}

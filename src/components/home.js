@@ -1,101 +1,13 @@
-import React, { useState, useMemo, useEffect } from 'react';
-import { FileText, Download, Folder, ArrowLeft, Lock, Unlock, BookOpen, File, Mail, Briefcase } from 'lucide-react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import { ArrowLeft, Mail, Briefcase, AlertCircle, Loader2, BookOpen } from 'lucide-react';
+import { SmallCourseCard } from './subcomponents/interface-course';
+import CourseDetailView from './subcomponents/course-detail';
+
+const COURSES_SOURCE_URL = new URL('../temp/courses.json', import.meta.url);
 
 // =======================================================================
 // DUMMY DATA (Data Penuh untuk Simulasi)
 // =======================================================================
-const ALL_COURSES = [
-    { 
-        id: 1, 
-        title: 'Tailwind CSS for Modern Web', 
-        subtitle: 'Dasar-dasar Tailwind CSS & Utility-First Workflow',
-        subject: 'Web Development', 
-        semester: 'Genap 2024', 
-        author: 'Adrian Dev', 
-        rating: 4.8, 
-        students: 1500,
-        thumbnail: "https://placehold.co/400x220/334155/ffffff?text=Tailwind+CSS", 
-        isPopular: true,
-        content: "Selamat datang ke kursus Tailwind CSS! Di sini, anda akan belajar bagaimana untuk membina antaramuka pengguna yang cantik dan responsif dengan pantas tanpa perlu menulis sebarang CSS tersuai. \n\nModul termasuk: Utility-First Fundamentals, Responsive Design, State Variants (Hover, Focus), dan Customizing Configuration. Sesi latihan praktikal akan berfokus pada pembinaan kad, navigasi, dan borang.",
-        enrollmentCount: 1500, // Data baru
-        materials: [ // Data baru
-            { name: 'Pengantar Tailwind.pdf', size: '1.5 MB', type: 'pdf' },
-            { name: 'Utility-First Cheat Sheet.docx', size: '300 KB', type: 'doc' },
-            { name: 'Studi Kasus Responsif.txt', size: '10 KB', type: 'txt' },
-        ],
-    },
-    { 
-        id: 2, 
-        title: 'Pengantar Desain UX/UI', 
-        subtitle: 'UI/UX Design | Genap 2024',
-        subject: 'UX/UI Design', 
-        semester: 'Genap 2024', 
-        author: 'Bunga Sari', 
-        rating: 4.5, 
-        students: 2200,
-        thumbnail: "https://placehold.co/400x220/10b981/ffffff?text=UX/UI+Design", 
-        isPopular: true,
-        content: "Kursus ini memperkenalkan prinsip-prinsip Asas Reka Bentuk Pengalaman Pengguna (UX) dan Antaramuka Pengguna (UI). Kami akan meneroka proses dari penyelidikan pengguna hingga prototaip akhir. \n\nTopik Utama: Penyelidikan Persona, Peta Perjalanan Pengguna, Wireframing, Prinsip Visual Design, dan Alat Figma.",
-        enrollmentCount: 2200, // Data baru
-        materials: [ // Data baru
-            { name: 'UX Persona Guide.pdf', size: '2.2 MB', type: 'pdf' },
-            { name: 'Wireframing Templates.docx', size: '450 KB', type: 'doc' },
-        ],
-    },
-    { 
-        id: 3, 
-        title: 'Aljabar Linear', 
-        subtitle: 'Aljabar Linear untuk Data Science',
-        subject: 'Mathematics', 
-        semester: 'Genap 2024', 
-        author: 'Prof. Candra', 
-        rating: 4.9, 
-        students: 800,
-        thumbnail: "https://placehold.co/400x220/9333ea/ffffff?text=Linear+Algebra", 
-        isPopular: true,
-        content: "Aljabar Linear adalah tulang belakang kepada bidang Data Science dan Machine Learning. Kursus ini merangkumi Vektor, Matriks, Ruang Vektor, dan Transformasi Linear. \n\nKami akan menekankan aplikasi praktikal seperti Principal Component Analysis (PCA) dan sistem persamaan linear yang digunakan dalam model statistik.",
-        enrollmentCount: 800, // Data baru
-        materials: [ // Data baru
-            { name: 'Matriks dan Vektor.pdf', size: '3.0 MB', type: 'pdf' },
-        ],
-    },
-    { 
-        id: 4, 
-        title: 'Deep Learning Part I', 
-        subtitle: 'Artificial Intelligence | Ganjil 2025',
-        subject: 'Artificial Intelligence', 
-        semester: 'Ganjil 2025', 
-        author: 'Adrian Dev', 
-        rating: 4.7, 
-        students: 1100,
-        thumbnail: "https://placehold.co/400x220/f97316/ffffff?text=Deep+Learning", 
-        isPopular: true,
-        content: "Kursus ini merangkumi asas Deep Learning, bermula dari jaringan saraf tiruan asas (ANN) hingga Convolutional Neural Networks (CNN) dan Recurrent Neural Networks (RNN). \n\nPrasyarat: Pemahaman asas tentang Aljabar Linear dan Kalkulus. Anda akan bekerja dengan PyTorch/TensorFlow untuk melaksanakan projek klasifikasi imej dan penjanaan teks mudah.",
-        enrollmentCount: 1100, // Data baru
-        materials: [ // Data baru
-            { name: 'Jaringan Saraf Tiruan.pdf', size: '5.5 MB', type: 'pdf' },
-            { name: 'Latihan CNN PyTorch.txt', size: '20 KB', type: 'txt' },
-        ],
-    },
-    { 
-        id: 5, 
-        title: 'Sistem Basis Data (SQL)', 
-        subtitle: 'Basis Data Lanjut & Normalisasi',
-        subject: 'Database', 
-        semester: 'Genap 2024', 
-        author: 'Dr. Emilia', 
-        rating: 4.6, 
-        students: 950,
-        thumbnail: "https://placehold.co/400x220/0f172a/ffffff?text=SQL", 
-        isPopular: false,
-        content: "Fokus pada pengurusan basis data relasional. Kami akan mendalami pengoptimuman kueri, transaksi, dan normalisasi (1NF hingga 3NF). \n\nLatihan: Penulisan kueri kompleks menggunakan JOIN, Subqueries, dan Stored Procedures.",
-        enrollmentCount: 950, // Data baru
-        materials: [ // Data baru
-            { name: 'Optimasi Query.pdf', size: '1.8 MB', type: 'pdf' },
-            { name: 'Contoh Prosedur Tersimpan.docx', size: '150 KB', type: 'doc' },
-        ],
-    }
-];
 
 const ALL_AUTHORS = [
     { 
@@ -126,88 +38,6 @@ const ALL_AUTHORS = [
         expertise: 'Linear Algebra, Advanced Calculus, Data Science',
     },
 ];
-
-// =======================================================================
-// SUB-KOMPONEN ITEM FILE MATERI (TIDAK BERUBAH)
-// =======================================================================
-const MaterialFileItem = ({ material }) => {
-    let icon;
-    let iconBgColor;
-
-    switch (material.type) {
-        case 'pdf':
-            icon = <FileText className="w-5 h-5 text-red-600" />;
-            iconBgColor = 'text-red-600';
-            break;
-        case 'doc':
-        case 'docx':
-            icon = <File className="w-5 h-5 text-blue-600" />;
-            iconBgColor = 'text-blue-600';
-            break;
-        case 'txt':
-            icon = <FileText className="w-5 h-5 text-gray-600" />;
-            iconBgColor = 'text-gray-600';
-            break;
-        default:
-            icon = <File className="w-5 h-5 text-gray-600" />;
-            iconBgColor = 'text-gray-600';
-    }
-
-    const handlePreview = () => {
-        // Implementasi logika pratinjau file di sini
-        alert(`Simulasi: Membuka pratinjau untuk ${material.name}`);
-    };
-    
-    return (
-        <div 
-            className="flex items-center justify-between p-3 border-b last:border-b-0 hover:bg-gray-50 transition duration-150 cursor-pointer" 
-            onClick={handlePreview}
-        >
-            <div className="flex items-start space-x-3">
-                <div className={`pt-1 ${iconBgColor}`}>
-                    {icon}
-                </div>
-                <div>
-                    <p className="text-base font-medium text-gray-800">{material.name}</p>
-                    <p className="text-xs text-gray-500">{material.type.toUpperCase()} | {material.size}</p>
-                </div>
-            </div>
-            
-            <span className="text-blue-600 hover:text-blue-700 font-medium text-sm transition duration-150 p-2 rounded-lg">
-                Pratinjau
-            </span>
-        </div>
-    );
-};
-
-
-// =======================================================================
-// SUB-KOMPONEN CARD KURSUS KECIL (Digunakan dalam AuthorDetailView)
-// =======================================================================
-const SmallCourseCard = ({ course, onCourseClick }) => {
-    return (
-        <button 
-            onClick={() => onCourseClick(course)} 
-            className="w-full text-left bg-white rounded-xl shadow-md border border-gray-100 transition duration-300 transform hover:scale-[1.02] overflow-hidden cursor-pointer group p-0"
-        >
-            <img 
-                src={course.thumbnail} 
-                alt={course.title} 
-                className="w-full h-28 object-cover rounded-t-xl group-hover:opacity-90 transition duration-300" 
-                onError={(e) => { e.target.onerror = null; e.target.src=`https://placehold.co/400x120/cccccc/000000?text=${course.title}`; }} 
-            />
-            <div className="p-3">
-                <p className="text-md font-extrabold text-gray-900 line-clamp-2 mb-1">{course.title}</p>
-                <p className="text-xs text-sky-600 font-semibold">{course.subject} | {course.semester}</p>
-                <p className="flex items-center text-yellow-500 text-xs mt-1">
-                    <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.817 2.042a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.817-2.042a1 1 0 00-1.175 0l-2.817 2.042c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
-                    {course.rating}
-                </p>
-            </div>
-        </button>
-    );
-};
-
 
 // =======================================================================
 // SUB-KOMPONEN DETAIL PENGAJAR (BARU)
@@ -288,115 +118,6 @@ const AuthorDetailView = ({ author, allCourses, onBack, onCourseClick }) => {
     );
 };
 
-// =======================================================================
-// SUB-KOMPONEN DETAIL KURSUS (TIDAK BERUBAH)
-// =======================================================================
-
-/**
- * Komponen untuk Tampilan Detail Course
- */
-const CourseDetailView = ({ course, onBack }) => {
-    const [isEnrolled, setIsEnrolled] = useState(false); 
-
-    const handleEnroll = () => {
-        alert(`Simulasi: Anda berhasil mendaftar ke kursus ${course.title}!`);
-        setIsEnrolled(true); 
-    };
-
-    return (
-        <div className="max-w-4xl mx-auto bg-white p-6 sm:p-8 rounded-2xl shadow-xl border border-gray-100">
-            {/* Tombol Kembali */}
-            <button
-                onClick={onBack}
-                className="mb-6 flex items-center text-blue-600 hover:text-blue-800 font-semibold transition text-sm py-2 px-3 rounded-lg bg-blue-50 hover:bg-blue-100"
-            >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Kembali ke Dashboard
-            </button>
-
-            {/* Gambar Thumbnail */}
-            <img 
-                src={course.thumbnail} 
-                alt={course.title} 
-                className="w-full h-48 object-cover rounded-xl mb-6 shadow-md" 
-                onError={(e) => { e.target.onerror = null; e.target.src=`https://placehold.co/800x200/cccccc/000000?text=${course.title}`; }} 
-            />
-
-            {/* Info Course & Metadata */}
-            <div className="flex flex-wrap items-center text-sm text-gray-500 border-b pb-4 mb-6">
-                <span className={`text-xs sm:text-sm font-semibold px-3 py-1 rounded-full mr-4 mb-2 ${course.subject === 'Web Development' ? 'bg-sky-100 text-sky-600' : course.subject === 'UX/UI Design' ? 'bg-green-100 text-green-600' : 'bg-purple-100 text-purple-600'}`}>
-                    {course.subject} • {course.semester}
-                </span>
-                <p className="mr-4 mb-2">Oleh: <span className="font-medium text-gray-700">{course.author}</span></p>
-                <p className="flex items-center text-yellow-500 mb-2">
-                    <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.817 2.042a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.817-2.042a1 1 0 00-1.175 0l-2.817 2.042c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
-                    {course.rating} ({course.students.toLocaleString()} pelajar)
-                </p>
-                <p className="flex items-center text-gray-500 ml-4 mb-2">
-                    <BookOpen className="w-4 h-4 mr-1 text-blue-500" />
-                    {course.materials?.length || 0} Materi • 
-                    <Download className="w-4 h-4 ml-3 mr-1 text-green-500" />
-                    {course.enrollmentCount?.toLocaleString() || course.students.toLocaleString()} Unduhan
-                </p>
-            </div>
-
-
-            {/* Judul dan Subtitle */}
-            <h1 className="text-3xl font-extrabold text-gray-900 mb-4">{course.title}</h1>
-            <p className="text-xl font-semibold text-gray-700 mb-6">{course.subtitle}</p>
-
-
-            {/* Konten Utama Course (Apa yang akan dipelajari) */}
-            <div className="prose max-w-none text-gray-800 whitespace-pre-line border-t pt-6 mb-8">
-                <p className="text-2xl font-bold mb-4 text-blue-600">Apa yang akan anda pelajari:</p>
-                <pre className="p-4 bg-gray-50 border border-gray-200 rounded-lg overflow-x-auto text-base leading-relaxed">
-                    {course.content}
-                </pre>
-            </div>
-            
-            {/* ========================================================= */}
-            {/* KONDISI 1: BELUM TERDAFTAR (Locked View) */}
-            {/* ========================================================= */}
-            {!isEnrolled && (
-                <div className="mt-8 pt-6 border-t">
-                    <div className="p-8 rounded-xl text-center border-2 border-dashed border-red-300 bg-red-50">
-                        <Lock className="w-10 h-10 mx-auto text-red-500 mb-4" />
-                        <p className="text-red-700 font-bold text-lg mb-4">Anda belum terdaftar dalam course ini.</p>
-                        <button
-                            onClick={handleEnroll}
-                            className="px-8 py-3 bg-green-600 text-white font-semibold rounded-xl shadow-lg hover:bg-green-700 transition duration-300 transform hover:scale-[1.02] text-lg"
-                        >
-                            Daftar Kursus Ini
-                        </button>
-                    </div>
-                </div>
-            )}
-
-            {/* ======================================================= */}
-            {/* KONDISI 2: SUDAH TERDAFTAR (Materi View) */}
-            {/* ======================================================= */}
-            {isEnrolled && (
-                <div className="mt-8 pt-6 border-t border-gray-100">
-                     <div className="mb-6 p-4 rounded-xl bg-green-50 text-green-700 border border-green-200 flex items-center space-x-3">
-                        <Unlock className="w-5 h-5 flex-shrink-0" />
-                        <p className="font-semibold text-sm">Akses Penuh: Anda sudah terdaftar dalam course ini. Materi tersedia di bawah.</p>
-                    </div>
-
-                    {/* Daftar File Materi */}
-                    <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center">
-                        <Folder className="w-5 h-5 mr-2 text-yellow-600" />
-                        File Materi Course (Klik untuk Pratinjau)
-                    </h2>
-                    <div className="border rounded-xl divide-y bg-white shadow-md">
-                        {course.materials.map((material, index) => (
-                            <MaterialFileItem key={index} material={material} />
-                        ))}
-                    </div>
-                </div>
-            )}
-        </div>
-    );
-};
 
 
 // =======================================================================
@@ -404,18 +125,59 @@ const CourseDetailView = ({ course, onBack }) => {
 // =======================================================================
 
 const DashboardContent = () => {
+    const [courses, setCourses] = useState([]);
+    const [loadingCourses, setLoadingCourses] = useState(true);
+    const [coursesError, setCoursesError] = useState(null);
     // State untuk menguruskan pencarian dan tampilan
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCourse, setSelectedCourse] = useState(null);
-    // STATE BARU: Untuk menyimpan author yang dipilih
-    const [selectedAuthor, setSelectedAuthor] = useState(null); 
+    const [selectedAuthor, setSelectedAuthor] = useState(null);
 
-    // Mengira senarai kursus berdasarkan ALL_COURSES
-    const latestCourses = ALL_COURSES.slice(0, 5); // 5 kursus terbaharu
-    const popularCourses = ALL_COURSES.filter(c => c.isPopular);
+    const loadCourses = useCallback(async () => {
+        setLoadingCourses(true);
+        setCoursesError(null);
+
+        try {
+            const response = await fetch(COURSES_SOURCE_URL);
+            if (!response.ok) {
+                throw new Error('Gagal memuat courses.json dari server.');
+            }
+
+            const data = await response.json();
+            if (!Array.isArray(data)) {
+                throw new Error('Struktur data courses.json tidak valid.');
+            }
+
+            setCourses(data);
+            return;
+        } catch (fetchError) {
+            try {
+                const fallbackModule = await import('../temp/courses.json');
+                if (!Array.isArray(fallbackModule.default)) {
+                    throw fetchError;
+                }
+                setCourses(fallbackModule.default);
+                console.warn('Menggunakan fallback bundle courses.json karena fetch gagal:', fetchError);
+                return;
+            } catch (fallbackError) {
+                const finalMessage = fallbackError?.message || fetchError?.message || 'Gagal memuat data kursus.';
+                setCoursesError(finalMessage);
+            }
+        } finally {
+            setLoadingCourses(false);
+        }
+    }, []);
+
+    useEffect(() => {
+        loadCourses();
+    }, [loadCourses]);
+
+    const latestCourses = useMemo(() => courses.slice(0, 5), [courses]);
+    const popularCourses = useMemo(() => courses.filter(c => c.isPopular), [courses]);
 
     // Fungsi penapisan (Filter)
     const filterItems = (items, term) => {
+        if (!Array.isArray(items)) return [];
         if (!term) return items;
         const lowerTerm = term.toLowerCase();
         return items.filter(item =>
@@ -451,8 +213,9 @@ const DashboardContent = () => {
 
 
     // Logik untuk ralat
-    const noCourseResults = filteredLatestCourses.length === 0 && filteredPopularCourses.length === 0 && searchTerm;
-    const noAuthorResults = filteredPopularAuthors.length === 0 && searchTerm;
+    const hasSearchTerm = Boolean(searchTerm.trim());
+    const noCourseResults = hasSearchTerm && filteredLatestCourses.length === 0 && filteredPopularCourses.length === 0;
+    const noAuthorResults = hasSearchTerm && filteredPopularAuthors.length === 0;
     const noResultsAtAll = noCourseResults && noAuthorResults;
 
     // --- KONDISIONAL RENDER UTAMA ---
@@ -462,7 +225,7 @@ const DashboardContent = () => {
         return (
             <AuthorDetailView 
                 author={selectedAuthor} 
-                allCourses={ALL_COURSES} 
+                allCourses={courses} 
                 onBack={handleBackToDashboard} 
                 onCourseClick={handleCourseClick} // Memungkinkan klik kursus dari halaman Author
             />
@@ -481,6 +244,31 @@ const DashboardContent = () => {
                 Selamat Datang, Adrian!
                 <span className="ml-3 text-4xl" role="img" aria-label="Panda Emoji">🐼</span>
             </h2>
+
+            {coursesError && (
+                <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700">
+                    <div className="flex items-start space-x-3">
+                        <AlertCircle className="w-6 h-6 flex-shrink-0 mt-1" />
+                        <div>
+                            <p className="font-semibold">Gagal memuat data kursus</p>
+                            <p className="text-sm text-red-600">{coursesError}</p>
+                        </div>
+                    </div>
+                    <button
+                        onClick={loadCourses}
+                        className="self-start sm:self-auto px-4 py-2 bg-red-600 text-white text-sm font-semibold rounded-lg hover:bg-red-700 transition"
+                    >
+                        Coba Muat Ulang
+                    </button>
+                </div>
+            )}
+
+            {loadingCourses && !coursesError && (
+                <div className="mb-6 flex items-center space-x-3 p-4 bg-blue-50 border border-blue-200 rounded-xl text-blue-700 text-sm">
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    <span>Sedang memuat daftar kursus...</span>
+                </div>
+            )}
 
             {/* Search Bar */}
             <div className="mb-8 relative">

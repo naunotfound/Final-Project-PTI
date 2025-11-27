@@ -1,0 +1,132 @@
+[
+    {
+        "id": 1,
+        "title": "Tailwind CSS for Modern Web",
+        "subtitle": "Dasar-dasar Tailwind CSS & Utility-First Workflow",
+        "subject": "Web Development",
+        "semester": "Genap 2024",
+        "author": "Adrian Dev",
+        "rating": 4.8,
+        "students": 1500,
+        "thumbnail": "https://placehold.co/400x220/334155/ffffff?text=Tailwind+CSS",
+        "isPopular": true,
+        "content": "Selamat datang ke kursus Tailwind CSS! Di sini, anda akan belajar bagaimana untuk membina antaramuka pengguna yang cantik dan responsif dengan pantas tanpa perlu menulis sebarang CSS tersuai. \n\nModul termasuk: Utility-First Fundamentals, Responsive Design, State Variants (Hover, Focus), dan Customizing Configuration. Sesi latihan praktikal akan berfokus pada pembinaan kad, navigasi, dan borang.",
+        "enrollmentCount": 1500,
+        "materials": [
+            {
+                "name": "Pengantar Tailwind.pdf",
+                "size": "1.5 MB",
+                "type": "pdf"
+            },
+            {
+                "name": "Utility-First Cheat Sheet.docx",
+                "size": "300 KB",
+                "type": "doc"
+            },
+            {
+                "name": "Studi Kasus Responsif.txt",
+                "size": "10 KB",
+                "type": "txt"
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "title": "Pengantar Desain UX/UI",
+        "subtitle": "UI/UX Design | Genap 2024",
+        "subject": "UX/UI Design",
+        "semester": "Genap 2024",
+        "author": "Bunga Sari",
+        "rating": 4.5,
+        "students": 2200,
+        "thumbnail": "https://placehold.co/400x220/10b981/ffffff?text=UX/UI+Design",
+        "isPopular": true,
+        "content": "Kursus ini memperkenalkan prinsip-prinsip Asas Reka Bentuk Pengalaman Pengguna (UX) dan Antaramuka Pengguna (UI). Kami akan meneroka proses dari penyelidikan pengguna hingga prototaip akhir. \n\nTopik Utama: Penyelidikan Persona, Peta Perjalanan Pengguna, Wireframing, Prinsip Visual Design, dan Alat Figma.",
+        "enrollmentCount": 2200,
+        "materials": [
+            {
+                "name": "UX Persona Guide.pdf",
+                "size": "2.2 MB",
+                "type": "pdf"
+            },
+            {
+                "name": "Wireframing Templates.docx",
+                "size": "450 KB",
+                "type": "doc"
+            }
+        ]
+    },
+    {
+        "id": 3,
+        "title": "Aljabar Linear",
+        "subtitle": "Aljabar Linear untuk Data Science",
+        "subject": "Mathematics",
+        "semester": "Genap 2024",
+        "author": "Prof. Candra",
+        "rating": 4.9,
+        "students": 800,
+        "thumbnail": "https://placehold.co/400x220/9333ea/ffffff?text=Linear+Algebra",
+        "isPopular": true,
+        "content": "Aljabar Linear adalah tulang belakang kepada bidang Data Science dan Machine Learning. Kursus ini merangkumi Vektor, Matriks, Ruang Vektor, dan Transformasi Linear. \n\nKami akan menekankan aplikasi praktikal seperti Principal Component Analysis (PCA) dan sistem persamaan linear yang digunakan dalam model statistik.",
+        "enrollmentCount": 800,
+        "materials": [
+            {
+                "name": "Matriks dan Vektor.pdf",
+                "size": "3.0 MB",
+                "type": "pdf"
+            }
+        ]
+    },
+    {
+        "id": 4,
+        "title": "Deep Learning Part I",
+        "subtitle": "Artificial Intelligence | Ganjil 2025",
+        "subject": "Artificial Intelligence",
+        "semester": "Ganjil 2025",
+        "author": "Adrian Dev",
+        "rating": 4.7,
+        "students": 1100,
+        "thumbnail": "https://placehold.co/400x220/f97316/ffffff?text=Deep+Learning",
+        "isPopular": true,
+        "content": "Kursus ini merangkumi asas Deep Learning, bermula dari jaringan saraf tiruan asas (ANN) hingga Convolutional Neural Networks (CNN) dan Recurrent Neural Networks (RNN). \n\nPrasyarat: Pemahaman asas tentang Aljabar Linear dan Kalkulus. Anda akan bekerja dengan PyTorch/TensorFlow untuk melaksanakan projek klasifikasi imej dan penjanaan teks mudah.",
+        "enrollmentCount": 1100,
+        "materials": [
+            {
+                "name": "Jaringan Saraf Tiruan.pdf",
+                "size": "5.5 MB",
+                "type": "pdf"
+            },
+            {
+                "name": "Latihan CNN PyTorch.txt",
+                "size": "20 KB",
+                "type": "txt"
+            }
+        ]
+    },
+    {
+        "id": 5,
+        "title": "Sistem Basis Data (SQL)",
+        "subtitle": "Basis Data Lanjut & Normalisasi",
+        "subject": "Database",
+        "semester": "Genap 2024",
+        "author": "Dr. Emilia",
+        "rating": 4.6,
+        "students": 950,
+        "thumbnail": "https://placehold.co/400x220/0f172a/ffffff?text=SQL",
+        "isPopular": false,
+        "content": "Fokus pada pengurusan basis data relasional. Kami akan mendalami pengoptimuman kueri, transaksi, dan normalisasi (1NF hingga 3NF). \n\nLatihan: Penulisan kueri kompleks menggunakan JOIN, Subqueries, dan Stored Procedures.",
+        "enrollmentCount": 950,
+        "materials": [
+            {
+                "name": "Optimasi Query.pdf",
+                "size": "1.8 MB",
+                "type": "pdf"
+            },
+            {
+                "name": "Contoh Prosedur Tersimpan.docx",
+                "size": "150 KB",
+                "type": "doc"
+            }
+        ]
+    }
+]
