@@ -3,55 +3,7 @@ import React, { useState } from 'react';
 // =======================================================================
 // Data Simulasi Course (Diperluas dengan Status Enrollment dan File)
 // =======================================================================
-const MOCK_COURSES = [
-    {
-        id: 1,
-        title: "Ringkasan Algoritma Greedy",
-        subject: "Pemrograman",
-        type: "Teks",
-        downloads: 45,
-        uploadedBy: "Anda",
-        isEnrolled: true, // SUDAH ENROLL
-        description: "Ringkasan komprehensif tentang prinsip dan implementasi algoritma Greedy, termasuk contoh klasik seperti masalah penukaran uang dan *Activity Selection*.",
-        contentDetail: [
-            { name: "Pengantar Algoritma Greedy.pdf", type: "pdf", size: "1.2 MB" },
-            { name: "Struktur Data dan Kompleksitas Waktu.docx", type: "doc", size: "350 KB" },
-            { name: "Studi Kasus Knapsack.txt", type: "txt", size: "5 KB" },
-        ],
-        source: "https://en.wikipedia.org/wiki/Greedy_algorithm"
-    },
-    {
-        id: 2,
-        title: "Kuis Tahun Lalu - Database SQL",
-        subject: "Database",
-        type: "File",
-        downloads: 80,
-        uploadedBy: "Anda",
-        isEnrolled: false, // BELUM ENROLL
-        description: "Kumpulan soal Ujian Tengah Semester (UTS) tahun lalu mata kuliah Basis Data. Mencakup normalisasi, *stored procedures*, dan optimasi *query*.",
-        contentDetail: [
-            { name: "Soal UTS_BasisData_2024.pdf", type: "pdf", size: "890 KB" },
-            { name: "Kunci Jawaban_BasisData.docx", type: "doc", size: "410 KB" },
-        ],
-        source: "Tidak ada sumber eksternal"
-    },
-    {
-        id: 3,
-        title: "Catatan Kuliah Aljabar Linear",
-        subject: "Matematika",
-        type: "Teks",
-        downloads: 15,
-        uploadedBy: "Anda",
-        isEnrolled: true, // SUDAH ENROLL
-        description: "Catatan lengkap dari pertemuan 1 hingga 7 untuk materi Vektor dan Ruang Vektor.",
-        contentDetail: [
-            { name: "Vektor_dan_Operasi_Dasar.pdf", type: "pdf", size: "2.1 MB" },
-            { name: "Latihan_Soal_Aljabar.xlsx", type: "xls", size: "120 KB" },
-            { name: "Presentasi_Ruang_Vektor.pptx", type: "ppt", size: "5.5 MB" },
-        ],
-        source: "Buku Teks Aljabar Linear"
-    },
-];
+const MOCK_COURSES = [];
 
 // Helper function to get icon based on file type
 const getFileIcon = (fileType) => {
