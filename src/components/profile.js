@@ -1,9 +1,31 @@
 import React, { useState } from 'react';
+import adminCoursesData from '../temp/admin_courses.json';
+import AdminCourseList from './subcomponents/admin-course';
 
 // =======================================================================
 // Data Simulasi Course (Diperluas dengan Status Enrollment dan File)
 // =======================================================================
-const MOCK_COURSES = [];
+const normalizeAdminCourse = (course, index) => ({
+    id: course.id ?? index + 1,
+    title: course.title ?? 'Materi Tanpa Judul',
+    subject: course.subject ?? 'Umum',
+    semester: course.semester ?? 'Genap 2024',
+    author: course.author ?? 'Anonim',
+    rating: course.rating ?? 0,
+    students: course.students ?? 0,
+    thumbnail: course.thumbnail ?? `https://placehold.co/400x220/0f172a/ffffff?text=Course+${index + 1}`,
+    isPopular: Boolean(course.isPopular),
+    content: course.content ?? 'Belum ada ringkasan untuk materi ini.',
+    description: course.description ?? course.content ?? 'Belum ada deskripsi.',
+    enrollmentCount: course.enrollmentCount ?? course.students ?? 0,
+    materials: course.materials ?? [],
+    contentDetail: course.materials ?? [],
+    downloads: course.downloads ?? course.enrollmentCount ?? course.students ?? 0,
+    type: course.type ?? 'Teks',
+    isEnrolled: course.isEnrolled ?? true,
+});
+
+const MOCK_COURSES = (Array.isArray(adminCoursesData) ? adminCoursesData : []).map(normalizeAdminCourse);
 
 // Helper function to get icon based on file type
 const getFileIcon = (fileType) => {
@@ -242,80 +264,6 @@ const CourseEnrolledView = ({ course, onBack, onFileClick }) => {
     );
 };
 
-
-// =======================================================================
-// Komponen Daftar Course (List View)
-// =======================================================================
-const CourseItem = ({ course, onSelectCourse }) => {
-    const isFile = course.type === 'File';
-    const typeColor = isFile ? 'bg-green-100 text-green-700 border-green-300' : 'bg-blue-100 text-blue-700 border-blue-300';
-    const enrollStatus = course.isEnrolled 
-        ? <span className="text-xs font-bold text-green-600 bg-green-100 p-1 rounded-full">TERDAFTAR</span>
-        : <span className="text-xs font-bold text-red-600 bg-red-100 p-1 rounded-full">PUBLIK</span>;
-    
-    const handleDelete = (id) => {
-        console.log(`Menghapus Course ID: ${id}`);
-        window.alert(`Course "${course.title}" (ID: ${id}) berhasil dihapus.`);
-    };
-
-    return (
-        <div className="flex justify-between items-center p-4 bg-white rounded-xl shadow-md hover:shadow-lg transition duration-200 border border-gray-100">
-            <div className="flex-grow cursor-pointer" onClick={() => onSelectCourse(course.id)}>
-                {/* Tipe Konten dan Status */}
-                <div className="flex items-center space-x-2 mb-1">
-                    <span className={`inline-block px-2 py-0.5 text-xs font-semibold rounded-full border ${typeColor}`}>
-                        {course.type}
-                    </span>
-                    {enrollStatus}
-                </div>
-
-                {/* Judul dan Subjek */}
-                <h3 className="text-lg font-bold text-gray-800 hover:text-blue-600 transition duration-150">
-                    {course.title}
-                </h3>
-                <p className="text-sm text-gray-500 mb-2">{course.subject}</p>
-
-                {/* Statistik */}
-                <div className="flex items-center text-sm text-gray-500">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
-                    </svg>
-                    {course.downloads} Unduhan
-                </div>
-            </div>
-
-            {/* Tombol Hapus */}
-            <button 
-                onClick={() => handleDelete(course.id)} 
-                className="text-gray-400 hover:text-red-500 transition duration-150 p-2 rounded-full hover:bg-red-50 ml-4 flex-shrink-0"
-                aria-label="Hapus Course"
-            >
-                {/* SVG Icon Trash */}
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                </svg>
-            </button>
-        </div>
-    );
-};
-
-const SharedCoursesList = ({ courses, onSelectCourse }) => {
-    return (
-        <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
-            <h2 className="text-xl font-bold text-gray-800 mb-4">Daftar Course ({courses.length})</h2>
-            <div className="space-y-4">
-                {courses.map(course => (
-                    <CourseItem key={course.id} course={course} onSelectCourse={onSelectCourse} />
-                ))}
-            </div>
-            {courses.length === 0 && (
-                <p className="text-gray-500 italic p-4 bg-gray-50 rounded-lg text-center">
-                    Anda belum membagikan course apapun. Mulai unggah course baru sekarang!
-                </p>
-            )}
-        </div>
-    );
-};
 
 
 // =======================================================================
@@ -620,7 +568,7 @@ const App = () => {
                     )}
 
                     {activeTab === 'list' && (
-                        <SharedCoursesList courses={MOCK_COURSES} onSelectCourse={handleSelectCourse} />
+                        <AdminCourseList onSelectCourse={handleSelectCourse} />
                     )}
                 </div>
             </div>
