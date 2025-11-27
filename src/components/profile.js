@@ -378,6 +378,7 @@ const UploadCourseForm = () => {
         { key: 'uas', label: 'File UAS (Ujian Akhir Semester)' },
         { key: 'ebook', label: 'File E-Book / Referensi' },
         { key: 'asistensi', label: 'File Asistensi / Tutorial' },
+        { key: 'silabus', label: 'File Silabus' },
     ];
 
     const [courseData, setCourseData] = useState({
