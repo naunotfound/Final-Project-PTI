@@ -6,19 +6,31 @@ import AssignmentsView from './components/assignments';
 import ProfileView from './components/profile';
 import LoginPage from './components/login';
 import Register from './components/register';
-import { Bell, User, LogOut, Settings, ChevronDown, CheckCircle, Clock } from 'lucide-react';
+import { Bell, User, LogOut, Settings, ChevronDown, CheckCircle, Clock, Sun, Moon, LayoutDashboard, BookOpen, Bot, UserCircle } from 'lucide-react';
 
 import { ALL_LATEST_COURSES, ALL_POPULAR_COURSES, ALL_POPULAR_AUTHORS } from './data';
+
+const getInitialTheme = () => {
+  if (typeof window === 'undefined') return 'light';
+  const stored = window.localStorage.getItem('scele-theme');
+  if (stored === 'light' || stored === 'dark') {
+    return stored;
+  }
+  return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+    ? 'dark'
+    : 'light';
+};
 
 function App() {
   const [currentPage, setCurrentPage] = useState('Dashboard'); // Halaman default adalah Dashboard
   const [searchTerm, setSearchTerm] = useState(''); 
+  const [theme, setTheme] = useState(getInitialTheme);
 
   const navItems = [
-    { name: 'Dashboard', page: 'Dashboard', iconPath: 'M3 12L12 3l9 9H3z' },
-    { name: 'Courses', page: 'Courses', iconPath: 'M12 6.253v13M3.25 10.25h17.5M12 17.75l-4.75-4.75' },
-    { name: 'PandaAI', page: 'Assignments', iconPath: 'M19 11H5a2 2 0 00-2 2v7a2 2 0 002 2h14a2 2 0 002-2v-7a2 2 0 00-2-2z' },
-    { name: 'Profile', page: 'Profile', iconPath: 'M16 7a4 4 0 11-8 0 4 4 0 018 0z' },
+    { name: 'Dashboard', page: 'Dashboard', Icon: LayoutDashboard },
+    { name: 'Courses', page: 'Courses', Icon: BookOpen },
+    { name: 'PandaAI', page: 'Assignments', Icon: Bot },
+    { name: 'Profile', page: 'Profile', Icon: UserCircle },
   ];
   
   const mockUser = {
@@ -85,6 +97,16 @@ function App() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    document.documentElement.dataset.theme = theme;
+    window.localStorage.setItem('scele-theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+  };
+
   const toggleProfile = (e) => {
     e.stopPropagation();
     setIsProfileOpen(prev => !prev);
@@ -147,7 +169,7 @@ function App() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 font-sans">
+    <div className={`flex flex-col min-h-screen font-sans transition-colors duration-300 ${theme === 'dark' ? 'theme-dark bg-slate-900 text-gray-100' : 'theme-light bg-gray-50 text-gray-900'}`}>
       {/* Header */}
       <header className="bg-white shadow-lg sticky top-0 z-40 border-b border-gray-100">
         <div className="container mx-auto px-4 py-3 flex justify-between items-center">
@@ -159,6 +181,14 @@ function App() {
           </div>
 
           <div className="flex items-center space-x-2 sm:space-x-4">
+            <button
+              onClick={toggleTheme}
+              className={`p-2 rounded-full transition-all duration-200 ${theme === 'dark' ? 'bg-slate-800 text-amber-300 hover:bg-slate-700' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+              aria-label="Toggle theme"
+            >
+              {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            </button>
+
             {/* Notifications */}
             <div ref={notificationRef} className="relative">
               <button 
@@ -265,7 +295,7 @@ function App() {
               <SidebarItem
                 key={item.page}
                 name={item.name}
-                iconPath={item.iconPath}
+                Icon={item.Icon}
                 onClick={() => {
                   setCurrentPage(item.page);
                   if (item.page !== 'Dashboard') setSearchTerm('');
@@ -294,7 +324,7 @@ function App() {
               onClick={() => setCurrentPage(item.page)}
               className={`flex flex-col items-center p-1 rounded-lg transition duration-150 ${currentPage === item.page ? 'text-blue-600' : 'text-gray-500 hover:text-blue-600'}`}
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={item.iconPath} /></svg>
+              {item.Icon && <item.Icon className="w-6 h-6" />}
               <span className="text-xs">{item.name}</span>
             </button>
           ))}
