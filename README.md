@@ -1,75 +1,79 @@
-<<<<<<< HEAD
-# Final-Project-PTI
-hello this is our final project
-=======
-# Getting Started with Create React App
+# SCELE-NG
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+SCELE-NG adalah evolusi dari website SCELE tercinta yang berbasis React + Tailwind yang menyatukan dashboard mahasiswa, katalog kursus, manajemen tugas, hingga profil dosen/pengajar dalam satu antarmuka responsif. Proyek ini dikembangkan sebagai Final Project SBF PTI.
 
-## Available Scripts
+## 🌟 Fitur Utama
 
-In the project directory, you can run:
+- **Dashboard adaptif** – menampilkan kursus terbaru, kursus populer, statistik kemajuan, aktivitas terkini, serta daftar pengajar populer.
+- **Katalog Kursus interaktif** – memuat data dari `src/temp/courses.json`, dilengkapi pencarian real-time, kartu responsif (`SmallCourseCard`), dan tampilan detail course penuh.
+- **Manajemen Kursus Admin** – halaman profil memanfaatkan data `admin_courses.json` untuk menampilkan course yang diunggah, lengkap dengan modul upload/preview materi.
+- **Detail Course reusable** – komponen `CourseDetailView` digunakan ulang pada dashboard dan katalog untuk konsistensi UI/UX.
+- **Dark Mode global** – toggle tema tersimpan di `localStorage`, menerapkan CSS variable pada seluruh aplikasi.
+- **Navigasi multi-device** – sidebar untuk desktop, bottom nav untuk mobile, masing-masing dengan ikon Lucide.
+- **Autentikasi simulasi** – halaman Login/Register dengan alur berpindah halaman tanpa reload.
 
-### `npm start`
+## 🧱 Struktur Proyek
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+```
+src/
+├── App.js             # Root layout, routing antar halaman, kontrol tema
+├── index.js           # Entry point React
+├── index.css          # Tailwind + global style + dark mode variables
+├── components/
+│   ├── home.js        # Dashboard utama
+│   ├── courses.js     # Halaman katalog kursus
+│   ├── assignments.js # PandaAI / tugas
+│   ├── profile.js     # Profil + manajemen course admin
+│   ├── sidebar.js     # Item navigasi (desktop)
+│   └── subcomponents/
+│       ├── interface-course.js # SmallCourseCard
+│       ├── course-detail.js    # Tampilan detail course reusable
+│       └── admin-course.js     # Daftar course milik admin
+└── temp/
+	├── courses.json        # Data kursus publik
+	└── admin_courses.json  # Data kursus yang dibuat admin
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 🚀 Cara Menjalankan
 
-### `npm test`
+Pastikan Node.js dan npm sudah terpasang.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```bash
+git clone https://github.com/naunotfound/Final-Project-PTI.git
+cd Final-Project-PTI
+npm install
+npm start
+```
 
-### `npm run build`
+Aplikasi akan berjalan di `http://localhost:3000`.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 🛠️ Stack Teknologi
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- **React 18** – komponen fungsional dengan hooks (state, memo, effect).
+- **Tailwind CSS** – styling utility-first + custom CSS variable untuk dark mode.
+- **Lucide Icons** – ikon konsisten (header, sidebar, cards).
+- **JSON sebagai data source** – memudahkan simulasi backend/REST API.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 🔄 Alur Tema (Light/Dark)
 
-### `npm run eject`
+1. App mendeteksi preferensi awal (`localStorage` → `prefers-color-scheme`).
+2. State `theme` diset pada root `<div>` dan `document.documentElement.dataset.theme`.
+3. `index.css` memakai CSS variable (`--surface-body`, `--text-primary`, dll.).
+4. Toggle Sun/Moon di header mengubah state dan menyimpan preferensi.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## 📚 Panduan Pengembangan
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- Tambahkan data kursus baru melalui `src/temp/*.json`.
+- Gunakan komponen kecil (misal `SmallCourseCard`) untuk konsistensi UI.
+- Ikuti pola hook yang ada (state/pencarian di dashboard dan courses).
+- Saat menambah fitur, perhatikan dukungan dark mode (gunakan warna via CSS variable atau Tailwind neutral).
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## 🧪 Rencana Pengujian Lanjut (opsional)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- Testing unit untuk komponen card/detail dengan React Testing Library.
+- Snapshot test untuk memastikan tema tidak merusak layout.
+- Integrasi data dinamis (misal fetch API) dapat ditambahkan dengan fallback JSON yang sudah ada.
 
-## Learn More
+---
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
->>>>>>> 32d7ba1 (Initialize project using Create React App)
+Jika ada pertanyaan atau ingin berkontribusi, buat issue/pull request pada repository ini. Semoga dokumentasi ini membantu Anda memahami arsitektur SCELE-NG dan mempercepat pengembangan fitur berikutnya! ✨
